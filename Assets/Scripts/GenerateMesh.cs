@@ -27,9 +27,12 @@ public class GenerateMesh : MonoBehaviour
         var vertices = CalcAllVertices();
         // 頂点を結ぶ順番を計算
         var triangles = CalcTriangles(vertices.Length);
+        // UVの計算
+        var uvs = CalcUvs(vertices);
 
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+        mesh.uv = uvs;
         mesh.RecalculateNormals();
 
         // メッシュの適用
@@ -83,8 +86,8 @@ public class GenerateMesh : MonoBehaviour
     /// <summary>
     /// 頂点を結ぶ順番を計算して返す
     /// </summary>
-    /// <param name="verticesLength"></param>
-    /// <returns></returns>
+    /// <param name="verticesLength">頂点の数</param>
+    /// <returns>頂点を結ぶ順番の配列</returns>
     private int[] CalcTriangles(int verticesLength)
     {
         var triangles = new List<int>();
@@ -100,5 +103,20 @@ public class GenerateMesh : MonoBehaviour
         }
 
         return triangles.ToArray();
+    }
+
+    /// <summary>
+    /// UVを計算して返す
+    /// </summary>
+    /// <param name="vertices">メッシュの頂点座標</param>
+    /// <returns>UV座標の配列</returns>
+    private Vector2[] CalcUvs(Vector3[] vertices)
+    {
+        var uvs = new Vector2[vertices.Length];
+        for (var i = 0; i < uvs.Length; i++)
+        {
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+        }
+        return uvs;
     }
 }
